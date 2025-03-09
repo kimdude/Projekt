@@ -1,0 +1,20 @@
+@use "base.scss";
+
+.searchBtn {
+    font-family: base.$font-family;
+    font-size: 1.2rem;
+    font-weight: 600;
+    padding: 10px 15px 10px 15px;
+    background-color: base.$primary-color;
+    border: 0;
+    border-radius: 5px;
+}
+
+#searchInput {
+    font-family: base.$font-family;
+    font-size: 1.2rem;
+    width: 25%;
+    padding: 10px 15px 10px 15px;
+    border-radius: 5px;
+    border: 0;
+}
