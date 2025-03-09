@@ -6,26 +6,9 @@ body {
     background-color: base.$fourth-color;
 }
 
-#yellowGlow {
-    height: 5px;
-    width: 100%;
-    margin-top: 70px;
-    background-color: base.$tertiary-color;
-}
-
-#result {
-    margin: 0px;
-    padding: 2%;
-    color: base.$fourth-color;
-    background-color: base.$secondary-color;
-}
-
-#recommendations {
-    @extend #result;
-}
-
 #searchDiv {
-    padding: 4%;
+    margin-top: 40px;
+    padding: 5%;
 
     div {
         display: flex;
@@ -37,6 +20,24 @@ body {
     button {
         margin-left: 10px;
     }
+}
+
+#yellowGlow {
+    height: 10px;
+    width: 100%;
+    margin-top: 100px;
+    background-color: #fff;
+}
+
+#result {
+    margin: 0px;
+    padding: 2%;
+    color: base.$fourth-color;
+    background-color: base.$secondary-color;
+}
+
+#recommendations {
+    @extend #result;
 }
 
 footer {
@@ -54,6 +55,6 @@ footer {
 
 #smallLogo {
     margin-left: auto;
-    margin-right: 20px;
-    width: 100px;
+    margin-top: auto;
+    width: 70px;
 }
