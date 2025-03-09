@@ -1,13 +1,13 @@
 @use "base.scss";
 
-.searchBtn {
+.btn {
     box-shadow: 0px 2px 4px inset rgba(0, 0, 0, 0.25),
     0px -4px 6px inset rgba(198, 240, 255, 0.8);
     transition-property: box-shadow;
     transition-duration: 1s;
 }
 
-.searchBtn:active {
+.btn:active {
     box-shadow: 0px 0px 4px 4px inset rgba(0, 0, 0, 0.25);
 }
 
@@ -32,7 +32,10 @@
         0px 0px 115px base.$primary-color,
         0px 0px 120px base.$primary-color,
         0px 0px 130px base.$primary-color,
-        0px 0px 140px base.$primary-color;
+        0px 0px 140px base.$primary-color,
+        0px 0px 145px base.$primary-color,
+        0px 0px 150px base.$primary-color,
+        0px 0px 160px base.$primary-color;
     } 100% {
         box-shadow: 0px 0px 5px #fff,
         0px 0px 10px #fff,

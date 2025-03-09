@@ -36,6 +36,10 @@ body {
     background-color: base.$secondary-color;
 }
 
+#welcomeText {
+    text-align: center;
+}
+
 #recommendations {
     @extend #result;
 }
@@ -44,6 +48,11 @@ footer {
     display: flex;
     padding: 2%;
     background-color: base.$primary-color;
+
+    p {
+        font-size: 1.1rem;
+        line-height: 0.4rem;
+    }
 }
 
 #bigLogo {
