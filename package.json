@@ -1,0 +1,16 @@
+{
+  "name": "projekt",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "Kim Dudenhöfer",
+  "source": "src/index.html",
+  "type": "commonjs",
+  "scripts": {
+    "start": "parcel",
+    "build": "parcel build"
+  },
+  "devDependencies": {
+    "parcel": "^2.13.3"
+  }
+}
