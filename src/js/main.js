@@ -70,7 +70,7 @@ async function searchDataWM(data) {
 
     searchResult.innerHTML = "";
 
-    array.forEach( item => createArticle(item));
+    array.forEach(item => createArticle(item));
 
 }
 
@@ -97,8 +97,9 @@ async function createArticle(item) {
         paragraph.appendChild(released);
 
         article.addEventListener('click', function() {
-            let id = item.id
+            let id = item.imdb_id
             watchModeURL(id, "Details");
+            availabilityAPI(id);
         })
     }
 }
@@ -114,11 +115,12 @@ async function resultDataWM(data) {
     searchResult.appendChild(metaDiv);
 
     const image = document.createElement("img");
-    image.setAttribute("src",data.posterMedium);
+    image.setAttribute("src",data.poster);
     image.setAttribute("id","poster");
     metaDiv.appendChild(image);
 
     const infoDiv = document.createElement("div");
+    infoDiv.setAttribute("id","infoDiv");
     metaDiv.appendChild(infoDiv);
 
     const mainHeading = document.createElement("h1");
@@ -154,8 +156,66 @@ async function resultDataWM(data) {
     lengthPara.appendChild(length);
 
     const summaryPara = document.createElement("p");
+    summaryPara.setAttribute("class","plot");
     const summary = document.createTextNode(data.plot_overview);
     searchResult.appendChild(summaryPara);
     summaryPara.appendChild(summary);
+
+    similarTitles(data.similar_titles);
+}
+
+
+async function availabilityAPI(id) {
+
+    try {
+        const options = {
+            method: 'GET',
+            headers: {
+                'x-rapidapi-key': 'aff5add623msh11be409471c1a11p1a27e9jsn9554cc153346',
+		        'x-rapidapi-host': 'streaming-availability.p.rapidapi.com'
+            }
+        }
+
+        const response = await fetch(`https://streaming-availability.p.rapidapi.com/shows/${id}?series_granularity=episode`,options);
+
+        if(!response.ok) {
+            throw Error("Ett fel har uppträtt. Felaktigt svar från servern.");
+        }
+
+        const data = await response.json();
+        streamOptions(data);
+
+    } catch (error) {
+        console.error('Fel har inträffat:', error.message);
+    }
+}
+
+
+async function streamOptions(item) {
+
+    const options = item.streamingOptions.se;
+    const infoDiv = document.getElementById("infoDiv");
+
+    const logosDiv = document.createElement("div");
+    logosDiv.setAttribute("id","availability");
+    infoDiv.appendChild(logosDiv);
+
+    for(let i = 0; i < options.length; i++){
+
+            const logoImg = document.createElement("img");
+            logoImg.setAttribute("src", options[i].service.imageSet.darkThemeImage);
     
+            const logoLink = document.createElement("a");
+            logoLink.href = options[i].link;
+
+            logoLink.appendChild(logoImg);
+            logosDiv.appendChild(logoLink);
+
+            console.log(options[i].service.id)
+    }
+
+}
+
+async function similarTitles(titles) {
+    console.log(titles);
 }
