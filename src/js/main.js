@@ -17,12 +17,12 @@ searchBtn.addEventListener('click', function(){
 function watchModeURL(input, searchType) {
 
     if(searchType === "ID") {
-        let URL = `https://api.watchmode.com/v1/autocomplete-search/?apiKey=zgcdlr7nR2CnNZviJfCLLh73nbOSJVtaEzIzWfKW&search_value=${input}`;
+        let URL = `https://api.watchmode.com/v1/autocomplete-search/?apiKey=gADai968P03EJhARLoZCnzLEYsPsAwvDH4lBaWzE&search_value=${input}`;
 
         return URL;
 
     } else if(searchType === "Details") {
-        let URL = `https://api.watchmode.com/v1/title/${input}/details/?apiKey=zgcdlr7nR2CnNZviJfCLLh73nbOSJVtaEzIzWfKW&language=sv`;
+        let URL = `https://api.watchmode.com/v1/title/${input}/details/?apiKey=gADai968P03EJhARLoZCnzLEYsPsAwvDH4lBaWzE&language=sv`;
 
         return URL;
 
@@ -51,6 +51,8 @@ async function watchModeAPI(URL) {
 } 
 
 async function searchDataWM() {
+
+    searchResult.innerHTML = "";
     
     const URL = watchModeURL(input.value, "ID");
     const data = await watchModeAPI(URL);
@@ -59,21 +61,22 @@ async function searchDataWM() {
 
     let recommendHeading = document.createElement("h1");
     let heading = document.createTextNode("Söker du...");
-
     recommend.appendChild(recommendHeading);
     recommendHeading.appendChild(heading);
 
-    searchResult.innerHTML = "";
-
+    const rowDiv = document.createElement("div");
+    rowDiv.setAttribute("class","resultDisplay");
+    recommend.appendChild(rowDiv);
+    
     array.forEach(item => createArticle(item));
 
 }
 
 async function createArticle(item) {
     if(item.name != null && item.year != null) {
+
         let article = document.createElement("article");
-        recommend.appendChild(article);
-    
+
         let image = document.createElement("img");
         image.setAttribute("src",item.image_url);
         image.setAttribute("class","preview");
@@ -91,21 +94,41 @@ async function createArticle(item) {
         infoSummary.appendChild(paragraph);
         paragraph.appendChild(released);
 
+        const displayContainer = document.getElementsByClassName("resultDisplay");
+
+        const container = Array.from(displayContainer);
+        const containerReversed = container.reverse();
+        const currentContainer = containerReversed.findIndex(div => div.tagName.toLowerCase() === "div");
+
+        if(container[currentContainer].childElementCount >= 3) {
+            const rowDiv = document.createElement("div");
+            rowDiv.setAttribute("class","resultDisplay");
+            recommend.appendChild(rowDiv);
+            rowDiv.appendChild(article);
+
+        } else {
+            container[currentContainer].appendChild(article);
+        }
+
+
         article.addEventListener('click', async function() {
             let id = item.imdb_id
 
             const URL = watchModeURL(id, "Details");
             const data = await watchModeAPI(URL);
-            
+
             resultDataWM(data)
             availabilityAPI(id);
 
         })
+
     }
 }
 
 
 async function resultDataWM(data) {
+
+    console.log(data)
 
     recommend.innerHTML = "";
     searchResult.innerHTML = "";
@@ -115,7 +138,7 @@ async function resultDataWM(data) {
     searchResult.appendChild(metaDiv);
 
     const image = document.createElement("img");
-    image.setAttribute("src",data.poster);
+    image.setAttribute("src",data.posterMedium);
     image.setAttribute("id","poster");
     metaDiv.appendChild(image);
 
@@ -200,13 +223,18 @@ async function streamOptions(item) {
     logosDiv.setAttribute("id","availability");
     infoDiv.appendChild(logosDiv);
 
-    for(let i = 0; i < options.length; i++){
+    const unqiueOptions = options.filter((o,index,arr) =>
+        arr.findIndex(option => JSON.stringify(option.service.id) === JSON.stringify(o.service.id)) === index 
+    );
+
+
+    for(let i = 0; i < unqiueOptions.length; i++){
 
             const logoImg = document.createElement("img");
-            logoImg.setAttribute("src", options[i].service.imageSet.darkThemeImage);
+            logoImg.setAttribute("src", unqiueOptions[i].service.imageSet.darkThemeImage);
     
             const logoLink = document.createElement("a");
-            logoLink.href = options[i].link;
+            logoLink.href = unqiueOptions[i].link;
 
             logoLink.appendChild(logoImg);
             logosDiv.appendChild(logoLink);
@@ -216,7 +244,6 @@ async function streamOptions(item) {
 
 async function similarTitles(titles) {
     
-
     const heading = document.createElement("h2");
     const headingNode = document.createTextNode("Att titta på näst");
     heading.appendChild(headingNode);
