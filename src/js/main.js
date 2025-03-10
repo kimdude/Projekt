@@ -44,6 +44,7 @@ async function watchModeAPI(URL) {
         const data = await response.json();
         return data;
 
+
     } catch (error) {
         console.error('Fel har inträffat:', error.message);
     }
@@ -99,7 +100,6 @@ async function createArticle(item) {
             resultDataWM(data)
             availabilityAPI(id);
 
-            console.log(data)
         })
     }
 }
@@ -216,5 +216,57 @@ async function streamOptions(item) {
 
 async function similarTitles(titles) {
     
-    titles.forEach()
+
+    const heading = document.createElement("h2");
+    const headingNode = document.createTextNode("Att titta på näst");
+    heading.appendChild(headingNode);
+    recommend.appendChild(heading);
+
+    const links = titles.map(item => watchModeURL(item, 'Details'));
+    const data = await Promise.all(
+        links.map(item => watchModeAPI(item))
+    );
+
+    data.forEach(data => createSimilarArticles(data));
+}
+
+async function createSimilarArticles(item) {
+
+    let article = document.createElement("article");
+    recommend.appendChild(article);
+
+    let image = document.createElement("img");
+    image.setAttribute("src",item.poster);
+    image.setAttribute("class","preview");
+    article.appendChild(image);
+    
+    let infoSummary = document.createElement("div");
+    let heading = document.createElement("h3");
+
+    if(item.title === "") {
+        let title = document.createTextNode(item.original_title);
+        heading.appendChild(title);
+    } else {
+        let title = document.createTextNode(item.title);
+        heading.appendChild(title);
+    }
+
+    article.appendChild(infoSummary);
+    infoSummary.appendChild(heading);
+
+    let paragraph = document.createElement("p");
+    let released = document.createTextNode(item.year);
+    infoSummary.appendChild(paragraph);
+    paragraph.appendChild(released);
+
+    article.addEventListener('click', async function() {
+        let id = item.imdb_id
+
+        const URL = watchModeURL(id, "Details");
+        const data = await watchModeAPI(URL);
+        
+        resultDataWM(data)
+        availabilityAPI(id);
+
+    })
 }
