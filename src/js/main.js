@@ -9,7 +9,7 @@ searchBtn.addEventListener('click', function(){
 
     if(input.value.length >= 1) {
         recommend.innerHTML = "";
-        watchModeURL(input.value, "ID");
+        searchDataWM();
     } 
 });
 
@@ -19,12 +19,12 @@ function watchModeURL(input, searchType) {
     if(searchType === "ID") {
         let URL = `https://api.watchmode.com/v1/autocomplete-search/?apiKey=zgcdlr7nR2CnNZviJfCLLh73nbOSJVtaEzIzWfKW&search_value=${input}`;
 
-        watchModeAPI(URL);
+        return URL;
 
     } else if(searchType === "Details") {
         let URL = `https://api.watchmode.com/v1/title/${input}/details/?apiKey=zgcdlr7nR2CnNZviJfCLLh73nbOSJVtaEzIzWfKW&language=sv`;
 
-        watchModeAPI(URL);
+        return URL;
 
     } else {
         console.log("Något har gått fel.");
@@ -39,27 +39,21 @@ async function watchModeAPI(URL) {
 
         if(!response.ok) {
             throw new Error('Ett fel har uppstått. Felaktigt svar från servern.');
-        }
+        } 
 
         const data = await response.json();
-
-        if(URL.includes("autocomplete-search") === true) {
-            searchDataWM(data);
-    
-        } else if(URL.includes("details") === true) {
-            resultDataWM(data);
-    
-        } else {
-            console.log("Ett fel har uppstått. Ogiltig URL.")
-        }
+        return data;
 
     } catch (error) {
         console.error('Fel har inträffat:', error.message);
     }
 } 
 
-async function searchDataWM(data) {
+async function searchDataWM() {
     
+    const URL = watchModeURL(input.value, "ID");
+    const data = await watchModeAPI(URL);
+
     const array = data.results;
 
     let recommendHeading = document.createElement("h1");
@@ -96,10 +90,16 @@ async function createArticle(item) {
         infoSummary.appendChild(paragraph);
         paragraph.appendChild(released);
 
-        article.addEventListener('click', function() {
+        article.addEventListener('click', async function() {
             let id = item.imdb_id
-            watchModeURL(id, "Details");
+
+            const URL = watchModeURL(id, "Details");
+            const data = await watchModeAPI(URL);
+            
+            resultDataWM(data)
             availabilityAPI(id);
+
+            console.log(data)
         })
     }
 }
@@ -211,11 +211,10 @@ async function streamOptions(item) {
             logoLink.appendChild(logoImg);
             logosDiv.appendChild(logoLink);
 
-            console.log(options[i].service.id)
     }
-
 }
 
 async function similarTitles(titles) {
-    console.log(titles);
+    
+    titles.forEach()
 }
