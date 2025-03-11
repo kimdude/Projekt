@@ -74,13 +74,16 @@ async function searchDataWM() {
 
 async function createArticle(item) {
     if(item.name != null && item.year != null) {
+        console.log(item)
 
         let article = document.createElement("article");
 
         let image = document.createElement("img");
-        image.setAttribute("src",item.image_url);
-        image.setAttribute("class","preview");
         article.appendChild(image);
+        image.setAttribute("class","preview");
+
+        //
+        image.setAttribute("src",item.image_url);
         
         let infoSummary = document.createElement("div");
         let heading = document.createElement("h3");
@@ -173,10 +176,12 @@ async function resultDataWM(data) {
     infoDiv.appendChild(genrePara);
     genrePara.appendChild(genreNode);
 
-    const lengthPara = document.createElement("p");
-    const length = document.createTextNode(data.runtime_minutes + " min");
-    infoDiv.appendChild(lengthPara);
-    lengthPara.appendChild(length);
+    if(data.runtime_minutes !== null) {
+        const lengthPara = document.createElement("p");
+        const length = document.createTextNode(data.runtime_minutes + " min");
+        infoDiv.appendChild(lengthPara);
+        lengthPara.appendChild(length);
+    }
 
     const summaryPara = document.createElement("p");
     summaryPara.setAttribute("class","plot");
@@ -216,29 +221,31 @@ async function availabilityAPI(id) {
 
 async function streamOptions(item) {
 
-    const options = item.streamingOptions.se;
-    const infoDiv = document.getElementById("infoDiv");
-
-    const logosDiv = document.createElement("div");
-    logosDiv.setAttribute("id","availability");
-    infoDiv.appendChild(logosDiv);
-
-    const unqiueOptions = options.filter((o,index,arr) =>
-        arr.findIndex(option => JSON.stringify(option.service.id) === JSON.stringify(o.service.id)) === index 
-    );
-
-
-    for(let i = 0; i < unqiueOptions.length; i++){
-
-            const logoImg = document.createElement("img");
-            logoImg.setAttribute("src", unqiueOptions[i].service.imageSet.darkThemeImage);
+    if(item.streamingOptions.se && item.streamingOptions.se !== null) {
+        const options = item.streamingOptions.se;
+        const infoDiv = document.getElementById("infoDiv");
     
-            const logoLink = document.createElement("a");
-            logoLink.href = unqiueOptions[i].link;
-
-            logoLink.appendChild(logoImg);
-            logosDiv.appendChild(logoLink);
-
+        const logosDiv = document.createElement("div");
+        logosDiv.setAttribute("id","availability");
+        infoDiv.appendChild(logosDiv);
+    
+        const unqiueOptions = options.filter((o,index,arr) =>
+            arr.findIndex(option => JSON.stringify(option.service.id) === JSON.stringify(o.service.id)) === index 
+        );
+    
+    
+        for(let i = 0; i < unqiueOptions.length; i++){
+    
+                const logoImg = document.createElement("img");
+                logoImg.setAttribute("src", unqiueOptions[i].service.imageSet.darkThemeImage);
+        
+                const logoLink = document.createElement("a");
+                logoLink.href = unqiueOptions[i].link;
+    
+                logoLink.appendChild(logoImg);
+                logosDiv.appendChild(logoLink);
+    
+        }
     }
 }
 
@@ -250,17 +257,50 @@ async function similarTitles(titles) {
     recommend.appendChild(heading);
 
     const links = titles.map(item => watchModeURL(item, 'Details'));
-    const data = await Promise.all(
-        links.map(item => watchModeAPI(item))
-    );
+    const data  = []
 
-    data.forEach(data => createSimilarArticles(data));
+    for(let i = 0; i < 9; i++) {
+        let item = await watchModeAPI(links[i]);
+        data.push(item);
+    }
+
+    const rowDiv = document.createElement("div");
+    rowDiv.setAttribute("class","resultDisplay");
+    recommend.appendChild(rowDiv);
+
+    data.forEach(item => createSimilarArticles(item));
+
+    if(links.length > 9) {
+        const moreBtn = document.createElement("button");
+        moreBtn.setAttribute("class","btn");
+        const btnText = document.createTextNode("Se mer");
+        recommend.appendChild(moreBtn);
+        moreBtn.appendChild(btnText);
+
+        moreBtn.addEventListener("click", function() {
+            showMore(links,moreBtn);
+        })
+    }
+}
+
+async function showMore(links,thisButton) {
+
+    const moreData = []
+
+    for(let i = 9; i < links.length; i++) {
+        let item = await watchModeAPI(links[i]);
+        moreData.push(item);
+    }
+    
+    thisButton.style.display="none";
+
+    moreData.forEach(item => createSimilarArticles(item));
+
 }
 
 async function createSimilarArticles(item) {
 
     let article = document.createElement("article");
-    recommend.appendChild(article);
 
     let image = document.createElement("img");
     image.setAttribute("src",item.poster);
@@ -285,6 +325,23 @@ async function createSimilarArticles(item) {
     let released = document.createTextNode(item.year);
     infoSummary.appendChild(paragraph);
     paragraph.appendChild(released);
+
+    const displayContainer = document.getElementsByClassName("resultDisplay");
+
+    const container = Array.from(displayContainer);
+    const containerReversed = container.reverse();
+    const currentContainer = containerReversed.findIndex(div => div.tagName.toLowerCase() === "div");
+
+    if(container[currentContainer].childElementCount >= 3) {
+        const rowDiv = document.createElement("div");
+        rowDiv.setAttribute("class","resultDisplay");
+        recommend.appendChild(rowDiv);
+        rowDiv.appendChild(article);
+
+    } else {
+        container[currentContainer].appendChild(article);
+    }
+
 
     article.addEventListener('click', async function() {
         let id = item.imdb_id
