@@ -94,8 +94,8 @@ async function createArticle(item) {
         infoSummary.appendChild(heading);
 
         //
-        if(item.title && item.title === "") {
-            let title = document.createTextNode(item.original_title);
+        if(item.title && item.title !== "") {
+            let title = document.createTextNode(item.title);
             heading.appendChild(title);
 
         } else if(item.name){
@@ -103,7 +103,7 @@ async function createArticle(item) {
             heading.appendChild(title);
 
         } else {
-            let title = document.createTextNode(item.title);
+            let title = document.createTextNode(item.original_title);
             heading.appendChild(title);
         }
 
@@ -147,9 +147,6 @@ async function createArticle(item) {
 
 async function resultDataWM(data) {
 
-    console.log(data)
-    console.log(data.end_year)
-
     recommend.innerHTML = "";
     searchResult.innerHTML = "";
 
@@ -167,9 +164,14 @@ async function resultDataWM(data) {
     metaDiv.appendChild(infoDiv);
 
     const mainHeading = document.createElement("h1");
-    const title = document.createTextNode(data.title);
     infoDiv.appendChild(mainHeading);
-    mainHeading.appendChild(title);
+    if(data.title !== "") {
+        let title = document.createTextNode(data.title);
+        mainHeading.appendChild(title);
+    } else {
+        let title = document.createTextNode(data.original_title);
+        mainHeading.appendChild(title);
+    }
 
     const descrPara = document.createElement("p");
     const type = document.createTextNode(data.type);
@@ -269,7 +271,7 @@ async function streamOptions(item) {
 async function similarTitles(titles) {
     
     const heading = document.createElement("h2");
-    const headingNode = document.createTextNode("Att titta på näst");
+    const headingNode = document.createTextNode("Att titta på näst...");
     heading.appendChild(headingNode);
     recommend.appendChild(heading);
 

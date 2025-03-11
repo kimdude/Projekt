@@ -56,3 +56,13 @@
     animation-duration: 6s;
     animation-fill-mode: both;
 }
+
+article:hover {
+    transform: rotate(3deg)
+                scale(1.1,1.1);
+}
+
+#poster:hover {
+    transform: rotate(-3deg)
+            scale(1.2,1.2);
+}
