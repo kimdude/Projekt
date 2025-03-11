@@ -73,8 +73,7 @@ async function searchDataWM() {
 }
 
 async function createArticle(item) {
-    if(item.name != null && item.year != null) {
-        console.log(item)
+    if(item.name != null && item.year != null || item.title != null && item.year != null) {
 
         let article = document.createElement("article");
 
@@ -83,14 +82,31 @@ async function createArticle(item) {
         image.setAttribute("class","preview");
 
         //
-        image.setAttribute("src",item.image_url);
+        if(item.poster) {
+            image.setAttribute("src",item.poster);
+        } else if(item.image_url) {
+            image.setAttribute("src",item.image_url);
+        }
         
         let infoSummary = document.createElement("div");
         let heading = document.createElement("h3");
-        let title = document.createTextNode(item.name);
         article.appendChild(infoSummary);
         infoSummary.appendChild(heading);
-        heading.appendChild(title);
+
+        //
+        if(item.title && item.title === "") {
+            let title = document.createTextNode(item.original_title);
+            heading.appendChild(title);
+
+        } else if(item.name){
+            let title = document.createTextNode(item.name);
+            heading.appendChild(title);
+
+        } else {
+            let title = document.createTextNode(item.title);
+            heading.appendChild(title);
+        }
+
     
         let paragraph = document.createElement("p");
         let released = document.createTextNode(item.year);
@@ -132,6 +148,7 @@ async function createArticle(item) {
 async function resultDataWM(data) {
 
     console.log(data)
+    console.log(data.end_year)
 
     recommend.innerHTML = "";
     searchResult.innerHTML = "";
@@ -159,14 +176,14 @@ async function resultDataWM(data) {
     infoDiv.appendChild(descrPara);
     descrPara.appendChild(type);
 
-    if(data.year !== null) {
+    if(data.year && data.year !== null) {
         const year = document.createTextNode(", " + data.year);
         descrPara.appendChild(year);
     }
 
-    if(data.end_year !== null) {
-        const endYear = document.createTextNode("-" + data.endYear);
-        descrPara.appendChild(endYear)
+    if(data.end_year && data.end_year !== null) {
+        const endYear = document.createTextNode("-" + data.end_year);
+        descrPara.appendChild(endYear);
     }
 
     const genreArr = data.genre_names;
@@ -176,7 +193,7 @@ async function resultDataWM(data) {
     infoDiv.appendChild(genrePara);
     genrePara.appendChild(genreNode);
 
-    if(data.runtime_minutes !== null) {
+    if(data.runtime_minutes && data.runtime_minutes !== null) {
         const lengthPara = document.createElement("p");
         const length = document.createTextNode(data.runtime_minutes + " min");
         infoDiv.appendChild(lengthPara);
@@ -268,7 +285,7 @@ async function similarTitles(titles) {
     rowDiv.setAttribute("class","resultDisplay");
     recommend.appendChild(rowDiv);
 
-    data.forEach(item => createSimilarArticles(item));
+    data.forEach(item => createArticle(item));
 
     if(links.length > 9) {
         const moreBtn = document.createElement("button");
@@ -294,63 +311,6 @@ async function showMore(links,thisButton) {
     
     thisButton.style.display="none";
 
-    moreData.forEach(item => createSimilarArticles(item));
+    moreData.forEach(item => createArticle(item));
 
-}
-
-async function createSimilarArticles(item) {
-
-    let article = document.createElement("article");
-
-    let image = document.createElement("img");
-    image.setAttribute("src",item.poster);
-    image.setAttribute("class","preview");
-    article.appendChild(image);
-    
-    let infoSummary = document.createElement("div");
-    let heading = document.createElement("h3");
-
-    if(item.title === "") {
-        let title = document.createTextNode(item.original_title);
-        heading.appendChild(title);
-    } else {
-        let title = document.createTextNode(item.title);
-        heading.appendChild(title);
-    }
-
-    article.appendChild(infoSummary);
-    infoSummary.appendChild(heading);
-
-    let paragraph = document.createElement("p");
-    let released = document.createTextNode(item.year);
-    infoSummary.appendChild(paragraph);
-    paragraph.appendChild(released);
-
-    const displayContainer = document.getElementsByClassName("resultDisplay");
-
-    const container = Array.from(displayContainer);
-    const containerReversed = container.reverse();
-    const currentContainer = containerReversed.findIndex(div => div.tagName.toLowerCase() === "div");
-
-    if(container[currentContainer].childElementCount >= 3) {
-        const rowDiv = document.createElement("div");
-        rowDiv.setAttribute("class","resultDisplay");
-        recommend.appendChild(rowDiv);
-        rowDiv.appendChild(article);
-
-    } else {
-        container[currentContainer].appendChild(article);
-    }
-
-
-    article.addEventListener('click', async function() {
-        let id = item.imdb_id
-
-        const URL = watchModeURL(id, "Details");
-        const data = await watchModeAPI(URL);
-        
-        resultDataWM(data)
-        availabilityAPI(id);
-
-    })
 }
