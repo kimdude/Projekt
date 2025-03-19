@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Next Binge</title>
+    <link rel="stylesheet" href="sass/main.scss">
+    <script type="module" src="js/main.js"></script>
+    <link rel="icon" type="image/x-icon" href="images/bingeIcon.svg">
+</head>
+<body>
+    <main>
+        <!-- Div med logotyp och sökfält -->
+        <div id="searchDiv">
+            <a href="index.html"><img src="images/bingeLogo.svg" alt="Next Binge Logotyp." id="bigLogo"></a>
+            <div>
+                <label for="searchInput"></label>
+                <input type="text" name="searchInput" placeholder="Film, serie, tv-show..." id="searchInput">
+                <button class="btn" id="searchBtn">SÖK</button>
+            </div>
+        </div>
+        <!-- Div med gul lysande linje -->
+        <div id="yellowGlow"></div>
+        <!-- Sektion med information om sökningen -->
+        <section id="result">
+            <p id="welcomeText">Sök på en film, serie eller tv-show och få rekommendationer på liknande!</p>
+        </section>
+        <!-- Sektion med liknande rekommendationer -->
+        <section id="recommendations">
+            
+        </section>
+    </main>
+    <footer>
+        <div>
+            <p><strong>Next Binge</strong></p>
+            <p>Hitta din nästa film!</p>
+            <a href="https://api.watchmode.com/">Watchmode API</a><br>
+            <a href="https://tastedive.com/read/api">Taste Dive API</a><br>
+            <a href="https://developers.google.com/youtube/iframe_api_reference">Youtube Player API</a>
+        </div>
+        <img src="images/bingeIcon.svg" alt="Next Binge Logotyp" id="smallLogo">
+    </footer>
+</body>
+</html>

@@ -1,0 +1,205 @@
+//Using partial with base for graphic profile
+@use "base.scss";
+
+//General design
+body {
+    margin: 0px;
+    font-family: base.$font-family;
+    background-color: base.$fourth-color;
+}
+
+//Design for search-section
+#searchDiv {
+    margin-top: 40px;
+    padding: 5%;
+
+    div {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 40px;
+    }
+
+    button {
+        margin-left: 10px;
+    }
+}
+
+#bigLogo {
+    width: 40%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#yellowGlow {
+    height: 10px;
+    width: 100%;
+    margin-top: 100px;
+    background-color: #fff;
+}
+
+//Design for result-section
+#result {
+    margin: 0px;
+    padding: 2%;
+    color: base.$fourth-color;
+    background-color: base.$secondary-color;
+
+    * {
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: AUTO;
+    }
+
+    .plot {
+        max-width: 70ch;
+        font-size: 1.1rem;
+        font-weight: 300;
+        line-height: 1.6rem;
+    }
+}
+
+#metaInfo {
+    display: flex;
+    position: relative;
+    margin-top: -100px;
+    margin-bottom: 80px;
+    margin-left: 10%;
+
+}
+
+#welcomeText {
+    text-align: center;
+}
+
+#infoDiv {
+    flex-grow: 1;
+    margin-left: 40px;
+    margin-top: auto;
+
+    div {
+        img {
+            width: 70px;
+            margin-right: 20px;
+            box-shadow: none;
+        }
+    }
+}
+
+#poster {
+    width: 25%;
+    object-fit: cover;
+    box-shadow: 0px 30px 15px 9px rgba(0,0,0,0.25);
+}
+
+//Design for recommendations-section
+#recommendations {
+    @extend #result;
+
+    h2 {
+            padding-left: 5%;
+    }
+
+    article {
+        width: 25%;
+        height: fit-content;
+        background-color: base.$primary-color;
+        border-radius: 25px;
+        box-shadow: 0px 30px 15px 9px rgba(0,0,0,0.25);
+        cursor: pointer;
+
+        div {
+            padding: 10px 10%;
+        }
+
+        p,h3 {
+            color: #000;
+        }
+
+    }
+
+    img {
+        width: 100%;
+        height: 70%;
+        object-fit: cover;
+        border-radius: 25px 25px 0px 0px;
+    }
+
+    button {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 50px;
+        margin-bottom: 50px;
+    }
+
+}
+
+.resultDisplay {
+    display: flex;
+    margin: 50px 0;
+}
+
+//Design for footer
+footer {
+    display: flex;
+    padding: 2%;
+    background-color: base.$primary-color;
+
+    p {
+        font-size: 1.1rem;
+        line-height: 0.4rem;
+    }
+}
+
+#smallLogo {
+    margin-left: auto;
+    margin-top: auto;
+    width: 70px;
+}
+
+//Design for screens under 1000px
+@media screen and (max-width: 1000px) {
+    #poster { width: 35% }
+    .plot { width: 50ch; }
+}
+
+//Design for screens under 750px
+@media screen and (max-width: 750px) {
+    //Design for result-section
+    #metaInfo { flex-direction: column; margin-left: auto; margin-right: auto; margin-bottom: 20px; }
+    #infoDiv { margin-left: auto; margin-right: auto; margin-top: 30px; }
+    .plot { width: 40ch; }
+}
+
+//Design for screens under 640px
+@media screen and (max-width: 640px) { 
+    //Design for search-section
+    #bigLogo { width: 60%; }
+
+    //Design for result-section
+    #poster { width: 50%; }
+    .plot { width: 30ch; }
+    .resultDisplay { flex-direction: column; }
+
+    //Design for recommendations-section
+    #recommendations {
+        article { width: 60%; margin: 30px auto;}
+    }
+    .resultDisplay { margin: 0; }
+
+    //Design for footer
+    footer { flex-direction: column; padding: 5%; 
+        div {
+            text-align: center;
+        }
+    }
+    #smallLogo { margin-right: auto; margin-top: 40px; width: 70px; }
+}
+
+//Design for screens under 450px
+@media screen and (max-width: 450px) {
+    //Design for result-section
+    #poster { width: 60%; }
+}

@@ -1,0 +1,16 @@
+# DT211G - Projekt
+
+Skapa en webbplats med tydlig målgrupp och grafisk profil som får innehåll från minst två API:er.
+Skapa en 'mashup' med dem.
+
+**Grundkrav:**
+- minst två stycken olika webbtjänster/API:er som på något sätt kommunicerar med varandra
+- JavaScript-koden skall vara dokumenterad med JSDoc
+- automatiserad arbetsprocess för att sammanställa och optimera webbplatsen samt sköta automatisk publicering
+- versionshanteringssystem (Git) för att hantera källkod och dokumentation
+- SASS/SCSS för styling, i motsvarande omfattning till tidigare laboration
+- animeringar med hjälp av CSS och/eller JavaScript
+- välgjord design och grafisk profil, som är anpassad för den valda målgruppen
+- fungerar på olika typer av enheter med responsiv webbdesign
+- webbplatsens användagränssnitt och innehåll ska skapas och uppdateras med JavaScript och AJAX
+- innehåll, inklusive grafiskt material, skall vara optimerat och anpassat för att fungera för så många besökare som möligt (bakåtkompatilbelt)
