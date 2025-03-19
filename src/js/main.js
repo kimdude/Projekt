@@ -1,12 +1,37 @@
 "use strict";
 
+//Fetching elements from HTML-file
+/**
+ * Hämtar element från HTML-filen.
+ * 
+ * @var input - Refererar sökfält från HTML-filen.
+ * @type {document} - Representerar webbplatsen.
+ * @method getElementById - Hämtar elementet från webbplatsen via ID.
+ * 
+ */
 const input = document.getElementById("searchInput");
 const searchBtn = document.getElementById("searchBtn");
 const searchResult = document.getElementById("result");
 const recommend = document.getElementById("recommendations");
 
-searchBtn.addEventListener('click', function(){
 
+//Adding eventlistener
+/**
+ * Lägger till eventlyssnare på sök-knapp och triggar funktion.
+ * 
+ * @var searchBtn - Variabel som refererar till sök-knappen på webbplatsen.
+ * @method addEventListener - Lyssnar efter händelse för att starta funktion.
+ * @param {string} click - Specifierar att händelselyssnaren lyssnar efter klick.
+ * @param function - Triggar lokal funktion vid klick.
+ * 
+ * @param {number} - Sökfrasen ska vara längre än 1.
+ * @var recommend - Refererar till sektion i HTML-filen.
+ * @property {collection} innerHTML - Tömmer sektionens inehåll.
+ * 
+ * @function searchDataWM 
+ * 
+ */
+searchBtn.addEventListener('click', function(){
     if(input.value.length >= 1) {
         recommend.innerHTML = "";
         searchDataWM();
@@ -14,15 +39,22 @@ searchBtn.addEventListener('click', function(){
 });
 
 
+//Creates correct URL
+/**
+ * 
+ * @param {string} input - Searchphrase or
+ * @param {*} searchType 
+ * @returns 
+ */
 function watchModeURL(input, searchType) {
 
     if(searchType === "ID") {
-        let URL = `https://api.watchmode.com/v1/autocomplete-search/?apiKey=gADai968P03EJhARLoZCnzLEYsPsAwvDH4lBaWzE&search_value=${input}`;
+        let URL = `https://api.watchmode.com/v1/autocomplete-search/?apiKey=gn6j3eUh5iHlVHHXGLxTWKRkhbxCEBCFFhIvZU0V&search_value=${input}`;
 
         return URL;
 
     } else if(searchType === "Details") {
-        let URL = `https://api.watchmode.com/v1/title/${input}/details/?apiKey=gADai968P03EJhARLoZCnzLEYsPsAwvDH4lBaWzE&language=sv`;
+        let URL = `https://api.watchmode.com/v1/title/${input}/details/?apiKey=gn6j3eUh5iHlVHHXGLxTWKRkhbxCEBCFFhIvZU0V&language=sv`;
 
         return URL;
 
@@ -60,9 +92,17 @@ async function searchDataWM() {
     const array = data.results;
 
     let recommendHeading = document.createElement("h1");
-    let heading = document.createTextNode("Söker du...");
     recommend.appendChild(recommendHeading);
-    recommendHeading.appendChild(heading);
+
+    let type = array.map(item => item.result_type);
+
+    if(array.length === 0 || type.every(type => type !== "title")) {
+        let heading = document.createTextNode("Tyvärr hittar vi inte din sökning. Kontrollera stavning.");
+        recommendHeading.appendChild(heading);
+    } else {
+        let heading = document.createTextNode("Söker du...");
+        recommendHeading.appendChild(heading);
+    }
 
     const rowDiv = document.createElement("div");
     rowDiv.setAttribute("class","resultDisplay");
@@ -81,7 +121,6 @@ async function createArticle(item) {
         article.appendChild(image);
         image.setAttribute("class","preview");
 
-        //
         if(item.poster) {
             image.setAttribute("src",item.poster);
         } else if(item.image_url) {
@@ -93,7 +132,6 @@ async function createArticle(item) {
         article.appendChild(infoSummary);
         infoSummary.appendChild(heading);
 
-        //
         if(item.title && item.title !== "") {
             let title = document.createTextNode(item.title);
             heading.appendChild(title);

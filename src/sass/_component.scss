@@ -1,5 +1,7 @@
+//Using partial with base for graphic profile
 @use "base.scss";
 
+//Design for buttons
 .btn {
     font-family: base.$font-family;
     font-size: 1.2rem;
@@ -14,6 +16,7 @@
     cursor: pointer;
 }
 
+//Design for input
 #searchInput {
     font-family: base.$font-family;
     font-size: 1.2rem;
@@ -24,6 +27,7 @@
     box-shadow: 0px -3px 4px rgba(0,0,0,0.15);
 }
 
+//General design for links
 a {
     line-height: 1.2rem;
 }

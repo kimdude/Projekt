@@ -1,5 +1,7 @@
+//Using partial with base for graphic profile
 @use "base.scss";
 
+//Shadow/light-transition on buttons
 .btn {
     box-shadow: 0px 2px 4px inset rgba(0, 0, 0, 0.25),
     0px -4px 6px inset rgba(198, 240, 255, 0.8);
@@ -11,6 +13,7 @@
     box-shadow: 0px 0px 4px 4px inset rgba(0, 0, 0, 0.25);
 }
 
+//Glow-animation on page-load
 @keyframes glow {
     0% {
         box-shadow: none;
@@ -57,6 +60,7 @@
     animation-fill-mode: both;
 }
 
+//Rotating-transformation on articles and image
 article:hover {
     transform: rotate(3deg)
                 scale(1.1,1.1);
