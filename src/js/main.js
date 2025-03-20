@@ -41,10 +41,14 @@ searchBtn.addEventListener('click', function(){
 
 //Creates correct URL
 /**
+ * Skapar en länk med hjälp av sökfras och söktyp.
  * 
- * @param {string} input - Searchphrase or
- * @param {*} searchType 
- * @returns 
+ * @param input - Sökfras i form av textsträng eller id-nummer för film/serie.
+ * @param {string} searchType - Tar emot 'ID', som hittar alternativa sökrestultat, eller 'Details', som ger detalj om specifikt vald film eller serie.
+ * @var URL - Länk skapad med hjälp av sökfrasen och typ av sökning.
+ * 
+ * @returns {string} - Returnerar länken.
+ * 
  */
 function watchModeURL(input, searchType) {
 
@@ -59,11 +63,26 @@ function watchModeURL(input, searchType) {
         return URL;
 
     } else {
-        console.log("Något har gått fel.");
+        console.log("Något har gått fel. Ange searchType 'ID' eller 'Details'.");
     }
 }
 
 
+//Receives URL to fetch data from API.
+/**
+ * Tar emot länk och hämtar data från API med hjälp av try/catch samt async/await.
+ * @async watchModeAPI
+ * 
+ * @param {string} URL - Länk till API.
+ * @var response - Hämtar och refererar till datan från API:n.
+ * @throws - Kör felmeddelande när felaktigt svar kommer vid anrop till API.
+ * @var data - Konverterar JSON-datan till JavaScript.
+ * @param {Object} error - Fångas upp när fel uppstår.
+ * @property {string} message - Läser ut angivet felmeddelande.
+ * 
+ * @returns - Objekt med hämtad data.
+ * 
+ */
 async function watchModeAPI(URL) {
 
     try{
@@ -82,6 +101,47 @@ async function watchModeAPI(URL) {
     }
 } 
 
+
+//Fetches data on button-click and sends each item to createArticle().
+/**
+ * Hämtar data från watchModeAPI() och skickar varje array till createArticle().
+ * @async searchDataWM()
+ * 
+ * @var searchResult - Refererar till sektion i HTML-filen.
+ * @property {collection} innerHTML - Tömmer sektionens inehåll.
+ * @var URL - Hämtar och refererar till länk.
+ * @param input - Refererar till sökfält från HTML-filen.
+ * @property {string} value - Hämtar angiven sökfras från sökfältet.
+ * @param ID - Anger att den söker efter ID till film eller serie.
+ * 
+ * @var data - Hämtar och refererar till data från API:n.
+ * @var array - Refererar till nyckeln 'results' i data-objektet.
+ * 
+ * @var recommendHeading - Refererar till h1-elementet i HTML-filen.
+ * @method createElement - Skapar h1-elementet i HTML-filen.
+ * 
+ * @var recommend - Refererar till sektion i HTML-filen.
+ * @method appendChild - Lägger till elementet som childelement.
+ * 
+ * @var type - Array med typ av resultat.
+ * @method map - Loopar igenom datan.
+ * @param item - Varje värde i arrayen.
+ * @property {string} result_type - Typ av varje värde läggs in i arrayen.
+ * 
+ * @method every - Loopar igenom arrayen och kollar om ingen av värdena innehåller typen 'title'.
+ * @var heading - Refererar till textnode.
+ * @method createTextNode - Skapar ny textnode.
+ * 
+ * @var rowDiv - Refererar till div i HTML-filen.
+ * @method createElement - Skapar nytt element i HTML-filen.
+ * @method setAttribute - Lägger till attribut på elementet.
+ * @param {string} class - Anger klass som typ av attribut.
+ * @param {string} resultDisplay - Anger värdet av class, klassen resultDisplay.
+ * 
+ * @method forEach - Anropar funktion för varje värde i arrayen.
+ * @async createArticle
+ * 
+ */
 async function searchDataWM() {
 
     searchResult.innerHTML = "";
@@ -112,6 +172,50 @@ async function searchDataWM() {
 
 }
 
+//Creates articles for movies and series
+/**
+ * Skapar en artikel i recommend-sektionen.
+ * @async createArticle
+ * @param {Object} item - Objekt med film/serie.
+ * 
+ * @var article - Refererar till article-element i HTML-filen.
+ * @method createElement - Skapar elementet i HTML-filen.
+ * @var image - Refererar till image-elementet i HTML-filen.
+ * @method appendChild - Lägger till elementet som childelement.
+ * 
+ * @method setAttribute - Lägger till attribut på elementet.
+ * @param {string} class - Sätter class-attribut på elementet.
+ * @param {string} preview - Sätter preview som klass.
+ * 
+ * @property {string} poster - Länk till bild för filmen/serien.
+ * @property {string} image_url - Länk till bild för filmen/serien.
+ * @param {string} src - Sätter src-attribut på img-elementet för att länka till bilden.
+ * 
+ * @var infoSummary - Refererar till div-elementet i HTML-filen.
+ * @var heading - Refererar till h3-elementet i HTML-filen.
+ * 
+ * @property {string} title - Titel till filmen eller serien.
+ * @var title - Refererar till textsträng med titeln.
+ * @property {string} name - Titel till filmen eller serien.
+ * @method createTextNode - Skapar ny textnode.
+ * @property {string} original_title - Titel på originalspråket till filmen eller serien.
+ * 
+ * @var paragraph - Refererar till p-elementet i HTML-filen.
+ * @var released - Refererar till textnode med release-datum.
+ * @param {number} year - Årtal som filmen eller serien släpptes.
+ * 
+ * @var displayContainer - Refererar till div-elementet i HTML-filen.
+ * @method getElementsByClassName - Retunerar HTML-Collection av element med angivet class-name.
+ * @param {string} resultDisplay - Specifierar klassnamnet för element som ska hämtas.
+ * @var {Array} container - Refererar till array med HTML-element.
+ * @method Array.from - Gör array av objekt.
+ * @var containerReversed - Refererar till array med Div-element som vänts baklänges.
+ * @method reverse - Vänder på original arrayen med Div-element och sätter sista värdet som första.
+ * 
+ * @var currentContainer - Refererar till sista värdet, div:en, i original arrayen.
+ * @method findIndex - Hittar indexen på första värdet som 
+ * 
+ */
 async function createArticle(item) {
     if(item.name != null && item.year != null || item.title != null && item.year != null) {
 
@@ -155,18 +259,16 @@ async function createArticle(item) {
 
         const container = Array.from(displayContainer);
         const containerReversed = container.reverse();
-        const currentContainer = containerReversed.findIndex(div => div.tagName.toLowerCase() === "div");
 
-        if(container[currentContainer].childElementCount >= 3) {
+        if(containerReversed[0].childElementCount >= 3) {
             const rowDiv = document.createElement("div");
             rowDiv.setAttribute("class","resultDisplay");
             recommend.appendChild(rowDiv);
             rowDiv.appendChild(article);
 
         } else {
-            container[currentContainer].appendChild(article);
+            containerReversed[0].appendChild(article);
         }
-
 
         article.addEventListener('click', async function() {
             let id = item.imdb_id
@@ -183,8 +285,20 @@ async function createArticle(item) {
 }
 
 
+//Display clicked movie/show
+/**
+ * Visar vald film/serie vid klick
+ * @async resultDataWM
+ * 
+ * @param {Object} data - Objekt med information om vald film/serie.
+ * @var recommend - Refererar till sektion i HTML-filen.
+ * @property {collection} innerHTML - Tömmer sektionens inehåll.
+ * @var searchResult - Refererar till sektion i HTML-filen.
+ * 
+ */
 async function resultDataWM(data) {
 
+    console.log(data)
     recommend.innerHTML = "";
     searchResult.innerHTML = "";
 
