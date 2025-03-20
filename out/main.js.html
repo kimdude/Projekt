@@ -1,4 +1,32 @@
-"use strict";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: main.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: main.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>"use strict";
 
 //Fetching elements from HTML-file
 /**
@@ -53,12 +81,12 @@ searchBtn.addEventListener('click', function(){
 function watchModeURL(input, searchType) {
 
     if(searchType === "ID") {
-        let URL = `https://api.watchmode.com/v1/autocomplete-search/?apiKey=gn6j3eUh5iHlVHHXGLxTWKRkhbxCEBCFFhIvZU0V&search_value=${input}`;
+        let URL = `https://api.watchmode.com/v1/autocomplete-search/?apiKey=gn6j3eUh5iHlVHHXGLxTWKRkhbxCEBCFFhIvZU0V&amp;search_value=${input}`;
 
         return URL;
 
     } else if(searchType === "Details") {
-        let URL = `https://api.watchmode.com/v1/title/${input}/details/?apiKey=gn6j3eUh5iHlVHHXGLxTWKRkhbxCEBCFFhIvZU0V&language=sv`;
+        let URL = `https://api.watchmode.com/v1/title/${input}/details/?apiKey=gn6j3eUh5iHlVHHXGLxTWKRkhbxCEBCFFhIvZU0V&amp;language=sv`;
 
         return URL;
 
@@ -227,7 +255,7 @@ async function searchDataWM() {
  * 
  */
 async function createArticle(item) {
-    if(item.name != null && item.year != null || item.title != null && item.year != null) {
+    if(item.name != null &amp;&amp; item.year != null || item.title != null &amp;&amp; item.year != null) {
 
         let article = document.createElement("article");
 
@@ -246,7 +274,7 @@ async function createArticle(item) {
         article.appendChild(infoSummary);
         infoSummary.appendChild(heading);
 
-        if(item.title && item.title !== "") {
+        if(item.title &amp;&amp; item.title !== "") {
             let title = document.createTextNode(item.title);
             heading.appendChild(title);
 
@@ -383,12 +411,12 @@ async function resultDataWM(data) {
     infoDiv.appendChild(descrPara);
     descrPara.appendChild(type);
 
-    if(data.year && data.year !== null) {
+    if(data.year &amp;&amp; data.year !== null) {
         const year = document.createTextNode(", " + data.year);
         descrPara.appendChild(year);
     }
 
-    if(data.end_year && data.end_year !== null) {
+    if(data.end_year &amp;&amp; data.end_year !== null) {
         const endYear = document.createTextNode("-" + data.end_year);
         descrPara.appendChild(endYear);
     }
@@ -400,7 +428,7 @@ async function resultDataWM(data) {
     infoDiv.appendChild(genrePara);
     genrePara.appendChild(genreNode);
 
-    if(data.runtime_minutes && data.runtime_minutes !== null) {
+    if(data.runtime_minutes &amp;&amp; data.runtime_minutes !== null) {
         const lengthPara = document.createElement("p");
         const length = document.createTextNode(data.runtime_minutes + " min");
         infoDiv.appendChild(lengthPara);
@@ -499,7 +527,7 @@ async function availabilityAPI(id) {
  */
 async function streamOptions(item) {
 
-    if(item.streamingOptions.se && item.streamingOptions.se !== null) {
+    if(item.streamingOptions.se &amp;&amp; item.streamingOptions.se !== null) {
         const options = item.streamingOptions.se;
         const infoDiv = document.getElementById("infoDiv");
     
@@ -512,7 +540,7 @@ async function streamOptions(item) {
         );
     
     
-        for(let i = 0; i < unqiueOptions.length; i++){
+        for(let i = 0; i &lt; unqiueOptions.length; i++){
     
                 const logoImg = document.createElement("img");
                 logoImg.setAttribute("src", unqiueOptions[i].service.imageSet.darkThemeImage);
@@ -579,7 +607,7 @@ async function similarTitles(titles) {
     const links = titles.map(item => watchModeURL(item, 'Details'));
     const data  = []
 
-    for(let i = 0; i < 9; i++) {
+    for(let i = 0; i &lt; 9; i++) {
         let item = await watchModeAPI(links[i]);
         data.push(item);
     }
@@ -628,7 +656,7 @@ async function showMore(links,thisButton) {
 
     const moreData = []
 
-    for(let i = 9; i < links.length; i++) {
+    for(let i = 9; i &lt; links.length; i++) {
         let item = await watchModeAPI(links[i]);
         moreData.push(item);
     }
@@ -637,4 +665,26 @@ async function showMore(links,thisButton) {
 
     moreData.forEach(item => createArticle(item));
 
-}
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#URL">URL</a></li><li><a href="global.html#createArticle-Skaparartikelf%25C3%25B6raktuelltitel.">createArticle - Skapar artikel för aktuell titel.</a></li><li><a href="global.html#data">data</a></li><li><a href="global.html#forEach-Anroparfunktionf%25C3%25B6rvarjev%25C3%25A4rdeiarrayen.">forEach - Anropar funktion för varje värde i arrayen.</a></li><li><a href="global.html#getElementById-H%25C3%25A4mtarelementetfr%25C3%25A5nwebbplatsenviaID.">getElementById - Hämtar elementet från webbplatsen via ID.</a></li><li><a href="global.html#logoLink">logoLink</a></li><li><a href="global.html#searchDataWM">searchDataWM</a></li><li><a href="global.html#showMore-Listar%25C3%25B6vrigaliknandetitlar.">showMore - Listar övriga liknande titlar.</a></li><li><a href="global.html#similarTitles-Listarliknandetitlar.">similarTitles - Listar liknande titlar.</a></li><li><a href="global.html#streamingOptions-Listarstreamingm%25C3%25B6jligheter.">streamingOptions - Listar streaming möjligheter.</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Thu Mar 20 2025 16:01:59 GMT+0100 (Central European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
