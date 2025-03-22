@@ -198,6 +198,13 @@ footer {
     #smallLogo { margin-right: auto; margin-top: 40px; width: 70px; }
 }
 
+//Design vid ljust-tema
+@media (prefers-color-scheme: light) {
+    #result { color: #000; background-color: base.$primary-color; }
+    footer { color: #fff; background-color: base.$secondary-color; }
+    a { color: #fff; }
+}
+
 //Design for screens under 450px
 @media screen and (max-width: 450px) {
     //Design for result-section
